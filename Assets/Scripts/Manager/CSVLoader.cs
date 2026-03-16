@@ -10,8 +10,8 @@ using UnityEngine;
 public class CSVLoader : MonoBehaviour
 {
 #region Fields & Properties
-        private static string csvFolderPath = "Assets/100_Data/CSVData/"; // csv 파일들
-        private static string soScriptPath = "Assets/1_Play/1_Scripts/ScriptableObject/"; // object 클래스들 경로
+        private static string csvFolderPath = "Assets/CSV/"; // csv 파일들
+        private static string soScriptPath = "Assets/Scripts/ScriptableObject/"; // object 클래스들 경로
         private static string soAssetPath = "Assets/Resources/ScriptableObject/"; // object 객체들 경로
         
         #endregion
