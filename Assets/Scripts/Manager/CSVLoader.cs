@@ -10,8 +10,8 @@ using UnityEngine;
 public class CSVLoader : MonoBehaviour
 {
 #region Fields & Properties
-        private static string csvFolderPath = "Assets/100_Data/CSVData/"; // csv 파일들
-        private static string soScriptPath = "Assets/1_Play/1_Scripts/ScriptableObject/"; // object 클래스들 경로
+        private static string csvFolderPath = "Assets/CSV/"; // csv 파일들
+        private static string soScriptPath = "Assets/Scripts/ScriptableObject/"; // object 클래스들 경로
         private static string soAssetPath = "Assets/Resources/ScriptableObject/"; // object 객체들 경로
         
         #endregion
@@ -46,7 +46,7 @@ public class CSVLoader : MonoBehaviour
             foreach ( string filePath in csvFilePaths )
             {
                 // CSV 파일 이름(확장자 제외)을 가져옵니다. 이 이름을 바탕으로 클래스 및 에셋을 생성합니다.
-                string fileName = Path.GetFileNameWithoutExtension(filePath)+"_";
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
                 // Debug.Log("[CSVLoader] CSV FileName : "+fileName);
 
                 // 1. CSV 파일의 헤더와 첫 번째 데이터 행을 읽습니다.
@@ -97,14 +97,19 @@ public class CSVLoader : MonoBehaviour
             classContent.AppendLine("using UnityEngine;");
             classContent.AppendLine();
             classContent.AppendLine($"[CreateAssetMenu(fileName = \"New {soClassName}\", menuName = \"GameData/{soClassName}\")]");
-            classContent.AppendLine($"public class {soClassName} : ScriptableObject");
+            classContent.AppendLine($"public class {soClassName} : ScriptableObject, ICSVData");
             classContent.AppendLine("{");
 
             for (int i = 0; i < headers.Length; i++)
             {
                 classContent.AppendLine($"    public {dataTypes[i]} {headers[i]};");
             }
-        
+            
+            classContent.AppendLine("   public int GetId()");
+            classContent.AppendLine("   {");
+            classContent.AppendLine("       return Id;");
+            classContent.AppendLine("   }");
+            
             classContent.AppendLine("}");
 
             // 파일에 클래스 내용을 작성
