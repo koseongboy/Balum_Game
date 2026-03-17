@@ -97,3 +97,7 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# API Keys (절대 깃허브에 올리지 말 것!)
+Assets/Resources/secrets.json
+Assets/Resources/secrets.json.meta

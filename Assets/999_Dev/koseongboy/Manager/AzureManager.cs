@@ -6,9 +6,43 @@ using Microsoft.CognitiveServices.Speech.PronunciationAssessment;
 
 public class AzureManager : MonoBehaviour
 {
-    [Header("Azure API 설정")]
-    public string subscriptionKey = "7JgRPCb950YrIhN1Sr2acPCgDDRk40uJgA0WIxrDfI0wubYKEK2VJQQJ99CCACNns7RXJ3w3AAAYACOGKkub";
-    public string region = "koreacentral"; // 여기에 복사한 지역을 넣어주세요 (예: koreacentral)
+    // JSON 구조와 똑같은 클래스를 하나 만들어줘
+    [System.Serializable]
+    private class SecretData
+    {
+        public string azureApiKey;
+        public string azureRegion;
+    }
+
+    private string subscriptionKey;
+    private string region;
+
+    void Start()
+    {
+        LoadSecrets();
+    }
+
+    private void LoadSecrets()
+    {
+        // Resources 폴더에 있는 secrets.json 파일을 읽어옴 (확장자는 빼고 이름만!)
+        TextAsset secretFile = Resources.Load<TextAsset>("secrets");
+
+        if (secretFile != null)
+        {
+            // JSON 문자열을 C# 객체로 변환
+            SecretData secrets = JsonUtility.FromJson<SecretData>(secretFile.text);
+            subscriptionKey = secrets.azureApiKey;
+            region = secrets.azureRegion;
+            
+            Debug.Log("✅ API 키를 안전하게 불러왔습니다!");
+        }
+        else
+        {
+            Debug.LogError("🚨 secrets.json 파일을 찾을 수 없습니다!");
+        }
+    }
+    
+    // ... (나머지 발음 평가 코드는 동일하게 사용) ...
     
     // 예시: UI 버튼 클릭 시 이 함수를 실행하도록 연결하면 돼!
     public async void StartPronunciationTest()
