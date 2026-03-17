@@ -13,6 +13,7 @@ public class AzureManager : MonoBehaviour
         public string azureApiKey;
         public string azureRegion;
     }
+    public string referenceText = "안녕하세요 반갑습니다"; 
 
     private string subscriptionKey;
     private string region;
@@ -24,21 +25,20 @@ public class AzureManager : MonoBehaviour
 
     private void LoadSecrets()
     {
-        // Resources 폴더에 있는 secrets.json 파일을 읽어옴 (확장자는 빼고 이름만!)
+        // 🚨 수정됨: "secrets" -> "secret" 으로 변경! (확장자는 쓰면 안 됨)
         TextAsset secretFile = Resources.Load<TextAsset>("secrets");
 
         if (secretFile != null)
         {
-            // JSON 문자열을 C# 객체로 변환
             SecretData secrets = JsonUtility.FromJson<SecretData>(secretFile.text);
             subscriptionKey = secrets.azureApiKey;
             region = secrets.azureRegion;
             
-            Debug.Log("✅ API 키를 안전하게 불러왔습니다!");
+            Debug.Log($"✅ API 키 로드 성공! 길이: {subscriptionKey?.Length}");
         }
         else
         {
-            Debug.LogError("🚨 secrets.json 파일을 찾을 수 없습니다!");
+            Debug.LogError("🚨 Resources 폴더에서 'secret' (또는 secret.json) 파일을 찾을 수 없습니다!");
         }
     }
     
@@ -48,7 +48,7 @@ public class AzureManager : MonoBehaviour
     public async void StartPronunciationTest()
     {
         // 유저가 읽어야 할 문장 (대본)
-        string referenceText = "안녕하세요 반갑습니다"; 
+        
 
         Debug.Log("🎤 마이크 셋업 중...");
 
@@ -73,6 +73,7 @@ public class AzureManager : MonoBehaviour
         // 4. 음성 인식기(Recognizer) 생성 후, 발음 평가 규칙 덮어씌우기
         using var recognizer = new SpeechRecognizer(speechConfig, audioConfig);
         pronunciationConfig.ApplyTo(recognizer);
+
 
         Debug.Log("🗣️ 마이크가 켜졌습니다. 지금 문장을 읽어주세요!");
 
