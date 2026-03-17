@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -26,14 +27,26 @@ public class EtriPronunciationAPI : MonoBehaviour
 
     void Start()
     {
-        // 테스트용 가짜 데이터: 실제로는 유니티 마이크로 녹음된 WAV 파일의 byte[] 데이터가 들어가야 해!
-        byte[] dummyAudioData = new byte[] { 0x00, 0x01, 0x02 }; 
-        string targetScript = "안녕하세요"; // 읽을 문장
-
-        StartCoroutine(SendPronunciationData(dummyAudioData, targetScript));
+        
     }
 
-    IEnumerator SendPronunciationData(byte[] audioBytes, string scriptText)
+    public void StartConnection()
+    {
+        // 테스트용 가짜 데이터: 실제로는 유니티 마이크로 녹음된 WAV 파일의 byte[] 데이터가 들어가야 해!
+        string base64AudioData = EncodeWavToBase64("./records/Test");
+        string targetScript = "안녕하세요"; // 읽을 문장
+        if(base64AudioData != null)
+        {
+            StartCoroutine(SendPronunciationData(base64AudioData, targetScript));
+        } else
+        {
+            Debug.LogError("음성 데이터가 없습니다.");
+        }
+
+
+    }
+
+    IEnumerator SendPronunciationData(string base64AudioData, string scriptText)
     {
         // 요청 보낼 ETRI 한국어 발음평가 API 주소
         string url = "http://epretx.etri.re.kr:8000/api/WiseASR_PronunciationKor";
@@ -45,7 +58,7 @@ public class EtriPronunciationAPI : MonoBehaviour
             {
                 language_code = "korean", 
                 script = scriptText,
-                audio = Convert.ToBase64String(audioBytes) // 핵심! 오디오 데이터를 Base64 포맷으로 인코딩해야 해
+                audio = base64AudioData
             }
         };
 
@@ -86,4 +99,37 @@ public class EtriPronunciationAPI : MonoBehaviour
             }
         }
     }
+
+    private string EncodeWavToBase64(string filename)
+    {
+        if (!filename.ToLower().EndsWith(".wav")) {
+			filename += ".wav";
+		}
+
+		var filePath = Path.Combine(Application.persistentDataPath, filename);
+        // 1. 해당 경로에 파일이 진짜 있는지 확인
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError($"파일을 찾을 수 없습니다! 경로를 확인해 주세요: {filePath}");
+            return null;
+        }
+
+        try
+        {
+            // 2. WAV 파일을 통째로 읽어서 byte[] 배열로 가져오기
+            byte[] audioBytes = File.ReadAllBytes(filePath);
+
+            // 3. byte[] 배열을 Base64 형태의 긴 문자열로 변환 (이게 핵심!)
+            string base64String = Convert.ToBase64String(audioBytes);
+            
+            Debug.Log("✅ WAV 파일 Base64 인코딩 성공!");
+            return base64String;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"파일을 읽고 변환하는 중 에러가 발생했습니다: {e.Message}");
+            return null;
+        }
+    }
+
 }
