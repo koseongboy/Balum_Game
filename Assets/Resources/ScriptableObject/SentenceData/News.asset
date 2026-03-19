@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c499af4a203f24c4d9d8d03ee70f76b3, type: 3}
+  m_Name: News
+  m_EditorClassIdentifier: Assembly-CSharp::SentenceData
+  Id: 15
+  Theme: News
+  Difficulty: 1
+  Sentence: "\uC774 \uAE30\uAC04 \uCCB4\uACB0\uB41C \uB9E4\uB9E4 \uAC70\uB798 \uB0B4\uC6A9\uC744
+    \uBCF4\uBA74, \uAC00\uC7A5 \uC190\uBC14\uB01C\uC774 \uB9CE\uC774 \uC774\uB904\uC9C4
+    \uC804\uC6A9\uBA74\uC801\uC740 82\u33A1\uD615\uC774\uB2E4."

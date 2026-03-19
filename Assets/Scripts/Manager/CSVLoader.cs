@@ -42,7 +42,7 @@ public class CSVLoader : MonoBehaviour
                 return;
             }
         
-            string[] csvFilePaths = Directory.GetFiles(csvFolderPath, "*.csv");
+            string[] csvFilePaths = Directory.GetFiles(csvFolderPath, "*.tsv");
             foreach ( string filePath in csvFilePaths )
             {
                 // CSV 파일 이름(확장자 제외)을 가져옵니다. 이 이름을 바탕으로 클래스 및 에셋을 생성합니다.
